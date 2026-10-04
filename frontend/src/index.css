@@ -637,4 +637,5 @@ a:hover { text-decoration: underline; }
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 640px) {
-  .hero h2 { font-size: 1.8rem; } };
+  .hero h2 { font-size: 1.8rem; } 
+}
