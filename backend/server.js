@@ -20,22 +20,38 @@ const PORT = process.env.PORT || 3000;
 
 // ---------- MIDDLEWARES ----------
 //app.use(cors());
+// ---------- CORS ----------
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
-  process.env.FRONTEND_URL,
-].filter(Boolean);
+  'http://localhost:3000',
+];
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS non autorisé'));
+    // Autorise les requêtes sans origin (curl, Postman…)
+    if (!origin) return callback(null, true);
+
+    // Autorise explicitement les origines listées
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+
+    // Autorise tous les sous-domaines Vercel
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
+
+    // Autorise l'URL définie dans FRONTEND_URL (si présente)
+    if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) {
+      return callback(null, true);
     }
+
+    // Autorise un futur nom de domaine perso si défini
+    if (process.env.CUSTOM_DOMAIN && origin === process.env.CUSTOM_DOMAIN) {
+      return callback(null, true);
+    }
+
+    console.error('❌ CORS refusé pour :', origin);
+    callback(new Error('CORS non autorisé'));
   },
   credentials: true,
 }));
-app.use(express.json());
 
 // ---------- CONFIGURATION MULTER (uploads) ----------
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
