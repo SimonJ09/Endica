@@ -1,7 +1,7 @@
 // auth.js — Middleware d'authentification JWT
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret_de_dev_a_changer';
+const JWT_SECRET = process.env.JWT_SECRET || 'change_moi_en_une_longue_chaine_aleatoire_et_secrete_2026';
 
 // Vérifie que la requête contient un token valide
 export function requireAuth(req, res, next) {

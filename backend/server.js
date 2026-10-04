@@ -26,6 +26,7 @@ const ALLOWED_ORIGINS = [
   'http://localhost:3000',
 ];
 
+
 app.use(cors({
   origin: (origin, callback) => {
     // Autorise les requêtes sans origin (curl, Postman…)
@@ -52,6 +53,8 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+app.use(express.json()); 
 
 // ---------- CONFIGURATION MULTER (uploads) ----------
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
