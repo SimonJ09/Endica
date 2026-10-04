@@ -1,0 +1,6 @@
+[2026-09-16T20:40:54.954Z] [INIT] Deep Copilot debug log started. file=/home/ismael/judo/Endica/.deep-copilot/logs/session-2026-09-16T20-40-54-954Z.log
+[2026-09-16T20:40:54.955Z] [ACTIVATE] {"version":"0.43.1"}
+[2026-09-16T20:40:54.958Z] [PROVIDERS_LOADED] {"count":4,"ids":["anthropic","custom","deepseek","openai"]}
+[2026-09-16T20:40:54.959Z] [TERMINAL_MONITOR_STARTED] {}
+[2026-09-16T20:40:54.960Z] [STATUSBAR_REGISTERED] {"id":"deepseekAgent.statusBar"}
+[2026-09-16T20:40:54.971Z] [INLINE_COMPLETION_REGISTERED]

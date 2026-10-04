@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "type": "command",
+        "command": "node -e \"const fs=require('fs');let input='';process.stdin.on('data',d=>input+=d);process.stdin.on('end',()=>{let sid='unknown';try{const ctx=JSON.parse(input);sid=ctx.session_id||ctx.sessionId||'unknown';}catch(e){}fs.mkdirSync('/home/ismael/judo/Endica/.cortex/.hooks',{recursive:true});fs.writeFileSync('/home/ismael/judo/Endica/.cortex/.hooks/pre_compact_'+Date.now()+'.json',JSON.stringify({type:'pre_compact',sessionId:sid,timestamp:new Date().toISOString()}));});\""
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "node -e \"const fs=require('fs');let input='';process.stdin.on('data',d=>input+=d);process.stdin.on('end',()=>{let sid='unknown';try{const ctx=JSON.parse(input);sid=ctx.session_id||ctx.sessionId||'unknown';}catch(e){}fs.mkdirSync('/home/ismael/judo/Endica/.cortex/.hooks',{recursive:true});fs.writeFileSync('/home/ismael/judo/Endica/.cortex/.hooks/stop_'+Date.now()+'.json',JSON.stringify({type:'stop',sessionId:sid,timestamp:new Date().toISOString()}));});\""
+      }
+    ]
+  }
+}
