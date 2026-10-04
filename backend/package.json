@@ -4,6 +4,9 @@
   "description": "API pour la plateforme Remèdes du terroir",
   "main": "server.js",
   "type": "module",
+  "engines": {
+  "node": "22.x"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
