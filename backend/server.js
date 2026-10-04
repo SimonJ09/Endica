@@ -18,7 +18,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ---------- MIDDLEWARES ----------
-app.use(cors());
+//app.use(cors());
+const ALLOWED_ORIGINS = [
+  'http://localhost:5173',
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS non autorisé'));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // ---------- CONFIGURATION MULTER (uploads) ----------
