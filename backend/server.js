@@ -100,6 +100,7 @@ app.get('/', (req, res) => {
 });
 
 // ---------- ROUTE : LISTE DES REMÈDES ----------
+
 app.get('/api/remedes', (req, res) => {
   try {
     const remedes = db.prepare(`
@@ -108,7 +109,7 @@ app.get('/api/remedes', (req, res) => {
       FROM remedes
       WHERE statut = 'publie'
       ORDER BY date_ajout DESC
-      LIMIT 50
+      
     `).all();
 
     res.json({ total: remedes.length, remedes });

@@ -22,11 +22,11 @@ export default function FicheRemede() {
   const { id } = useParams();
   const [remede, setRemede] = useState(null);
   const [commentaires, setCommentaires] = useState([]);
+  const [medias, setMedias] = useState([]);
   const [chargement, setChargement] = useState(true);
   const [erreur, setErreur] = useState(null);
   const [likes, setLikes] = useState(0);
   const [messageLike, setMessageLike] = useState('');
-  const [medias, setMedias] = useState([]);
 
   // Formulaire commentaire
   const [pseudo, setPseudo] = useState('');
@@ -40,10 +40,11 @@ export default function FicheRemede() {
       api.get(`/remedes/${id}/comments`),
       api.get(`/remedes/${id}/media`),
     ])
-      .then(([resRemede, resComments]) => {
+      .then(([resRemede, resComments, resMedia]) => {
         setRemede(resRemede.data);
         setLikes(resRemede.data.likes);
         setCommentaires(resComments.data.commentaires);
+        setMedias(resMedia.data.medias);   // ✅ correction
       })
       .catch((err) => {
         console.error(err);
@@ -70,13 +71,8 @@ export default function FicheRemede() {
     e.preventDefault();
     setMessageCommentaire('');
     try {
-      await api.post(`/remedes/${id}/comments`, {
-        pseudonyme: pseudo,
-        contenu: contenu,
-      });
-      setMessageCommentaire(
-        '✅ Commentaire envoyé. Il sera publié après modération.'
-      );
+      await api.post(`/remedes/${id}/comments`, { pseudonyme: pseudo, contenu });
+      setMessageCommentaire('✅ Commentaire envoyé. Il sera publié après modération.');
       setPseudo('');
       setContenu('');
     } catch (err) {
@@ -113,9 +109,110 @@ export default function FicheRemede() {
           ❤️ Liker ({likes})
         </button>
       </div>
-      {messageLike && <p style={{ marginTop: '0.5rem', color: 'var(--texte-doux)', fontSize: '0.9rem' }}>{messageLike}</p>}
+      {messageLike && (
+        <p style={{ marginTop: '0.5rem', color: 'var(--texte-doux)', fontSize: '0.9rem' }}>
+          {messageLike}
+        </p>
+      )}
 
       <Avertissement compact />
+
+      {/* ---------- PHOTOS ET VIDÉOS ---------- */}
+      <section className="section">
+        <h2>📷 Photos et vidéos</h2>
+
+        {medias.length > 0 ? (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+              gap: '0.8rem',
+            }}
+          >
+            {medias.map((m) => (
+              <figure
+                key={m.id}
+                style={{
+                  margin: 0,
+                  background: 'white',
+                  border: '1px solid var(--bordure)',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                }}
+              >
+                {m.type === 'image' && (
+                  <img
+                    src={m.url}
+                    alt={m.titre || 'Photo du remède'}
+                    style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
+                  />
+                )}
+                {m.type === 'video' && (
+                  <video
+                    src={m.url}
+                    controls
+                    style={{ width: '100%', height: '180px', display: 'block', background: '#000' }}
+                  />
+                )}
+                {m.type === 'document' && (
+                  <a
+                    href={m.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'flex',
+                      height: '180px',
+                      background: '#f4f5f7',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '2.5rem',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    📄
+                  </a>
+                )}
+                <figcaption
+                  style={{
+                    padding: '0.6rem 0.8rem',
+                    fontSize: '0.85rem',
+                    color: 'var(--texte-doux)',
+                  }}
+                >
+                  {m.titre}
+                  {m.auteur && (
+                    <div style={{ fontSize: '0.75rem', marginTop: '0.2rem', opacity: 0.8 }}>
+                      © {m.auteur}
+                      {m.source && <> — {m.source}</>}
+                    </div>
+                  )}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ) : (
+          <div
+            style={{
+              background: 'white',
+              border: '2px dashed var(--bordure)',
+              borderRadius: '10px',
+              padding: '2rem 1rem',
+              textAlign: 'center',
+              color: 'var(--texte-doux)',
+            }}
+          >
+            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem', opacity: 0.5 }}>
+              📷
+            </div>
+            <p style={{ fontStyle: 'italic', margin: 0 }}>
+              Aucune photo ou vidéo disponible pour ce remède.
+            </p>
+            <p style={{ fontSize: '0.85rem', marginTop: '0.4rem', opacity: 0.8 }}>
+              Vous avez une photo à proposer ? Contribuez à enrichir cette fiche.
+            </p>
+          </div>
+        )}
+      </section>
 
       {remede.description && (
         <section className="section">
@@ -124,56 +221,46 @@ export default function FicheRemede() {
         </section>
       )}
 
-      {medias.length > 0 && (
+      {/* ---------- INGRÉDIENTS ---------- */}
+      {remede.ingredients && remede.ingredients.length > 0 && (
         <section className="section">
-            <h2>📷 Photos et vidéos</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.7rem' }}>
-            {medias.map((m) => (
-                <figure key={m.id} style={{ margin: 0 }}>
-                {m.type === 'image' && (
-                    <img
-                    src={m.url}
-                    alt={m.titre}
-                    style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '6px' }}
-                    />
-                )}
-                {m.type === 'video' && (
-                    <video src={m.url} controls style={{ width: '100%', borderRadius: '6px' }} />
-                )}
-                {m.type === 'document' && (
-                    <a href={m.url} target="_blank" rel="noreferrer" style={{
-                    display: 'flex', height: '160px', background: '#eee', borderRadius: '6px',
-                    alignItems: 'center', justifyContent: 'center', fontSize: '2rem', textDecoration: 'none'
-                    }}>📄</a>
-                )}
-                <figcaption style={{ fontSize: '0.8rem', color: 'var(--texte-doux)', marginTop: '0.3rem' }}>
-                    {m.titre}
-                    {m.auteur && <> — © {m.auteur}</>}
-                </figcaption>
-                </figure>
+          <h2>🌿 Ingrédients</h2>
+          <ul style={{ paddingLeft: '1.2rem' }}>
+            {remede.ingredients.map((ing) => (
+              <li key={ing.id} style={{ marginBottom: '0.4rem' }}>
+                <Link to={`/ingredients/${ing.id}`}>
+                  <strong>{ing.nom}</strong>
+                </Link>
+                {ing.nom_scientifique && <em> ({ing.nom_scientifique})</em>}
+                {ing.partie_utilisee && <> — {ing.partie_utilisee}</>}
+                {ing.quantite && <> — {ing.quantite} {ing.unite || ''}</>}
+              </li>
             ))}
-            </div>
+          </ul>
         </section>
-    )}
+      )}
 
-      {remede.ingredients.map((ing) => (
-        <li key={ing.id} style={{ marginBottom: '0.4rem' }}>
-        <Link to={`/ingredients/${ing.id}`}>
-            <strong>{ing.nom}</strong>
-        </Link>
-        {ing.nom_scientifique && <em> ({ing.nom_scientifique})</em>}
-        {ing.partie_utilisee && <> — {ing.partie_utilisee}</>}
-        </li>
-       ))}
-
-      {remede.indications.map((ind) => (
-        <li key={ind.id} style={{ marginBottom: '0.4rem' }}>
-        <Link to={`/indications/${ind.id}`}>
-            <strong>{ind.nom}</strong>
-        </Link>
-        {ind.synonymes && <span style={{ color: 'var(--texte-doux)' }}> ({ind.synonymes})</span>}
-        </li>
-        ))}
+      {/* ---------- INDICATIONS ---------- */}
+      {remede.indications && remede.indications.length > 0 && (
+        <section className="section">
+          <h2>📋 Indications rapportées</h2>
+          <p style={{ color: 'var(--texte-doux)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
+            Remèdes traditionnellement rapportés pour cette indication.
+          </p>
+          <ul style={{ paddingLeft: '1.2rem' }}>
+            {remede.indications.map((ind) => (
+              <li key={ind.id} style={{ marginBottom: '0.4rem' }}>
+                <Link to={`/indications/${ind.id}`}>
+                  <strong>{ind.nom}</strong>
+                </Link>
+                {ind.synonymes && (
+                  <span style={{ color: 'var(--texte-doux)' }}> ({ind.synonymes})</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {remede.mode_preparation && (
         <section className="section">
@@ -190,7 +277,7 @@ export default function FicheRemede() {
         </section>
       )}
 
-      {/* COMMENTAIRES */}
+      {/* ---------- COMMENTAIRES ---------- */}
       <section className="section">
         <h2>💬 Commentaires ({commentaires.length})</h2>
 
