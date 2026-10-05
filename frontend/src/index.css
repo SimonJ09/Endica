@@ -2331,3 +2331,208 @@ a:hover { text-decoration: underline; }
   .media-item img, .media-item video { height: 200px; }
   .media-doc { height: 200px; }
 }
+
+
+/* ============================================
+   PAGE ÉQUIPE
+   ============================================ */
+
+.equipe-page { padding-bottom: 0; }
+
+.equipe-narrow { max-width: 780px; }
+
+/* Hero */
+.equipe-hero {
+  background: linear-gradient(135deg, #e8f5e9 0%, #faf7f0 100%);
+  padding: 4rem 1rem 3rem;
+  text-align: center;
+  border-bottom: 1px solid var(--bordure);
+}
+.equipe-eyebrow {
+  display: inline-block;
+  background: white;
+  color: var(--vert-fonce);
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.equipe-hero h1 {
+  font-size: 2.2rem;
+  line-height: 1.2;
+  color: var(--vert-fonce);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 1.2rem;
+}
+.equipe-hero h1 .accent { color: var(--vert); }
+.equipe-lead {
+  font-size: 1.1rem;
+  color: var(--texte-doux);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* H2 */
+.equipe-h2 {
+  font-size: 1.6rem;
+  color: var(--vert-fonce);
+  border: none;
+  padding: 0;
+  margin-bottom: 1.2rem;
+}
+.equipe-h2.center { text-align: center; }
+
+.equipe-sub {
+  color: var(--texte-doux);
+  font-size: 1rem;
+  max-width: 620px;
+  margin: 0 auto 0.8rem;
+  line-height: 1.6;
+}
+
+/* Section alternée */
+.equipe-section-alt {
+  background: #f7f8f5;
+}
+
+/* Grille des membres */
+.membres-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+  max-width: 1000px;
+  margin: 2rem auto 0;
+}
+
+.membre {
+  background: white;
+  border: 1px solid var(--bordure);
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.membre:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+}
+
+.membre.membre-ouvert {
+  border-style: dashed;
+  background: #fafafa;
+}
+
+.membre-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  color: white;
+  font-weight: 800;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.membre-nom {
+  color: var(--vert-fonce);
+  font-size: 1.15rem;
+  margin-bottom: 0.3rem;
+}
+
+.membre-role {
+  font-size: 0.8rem;
+  color: var(--texte-doux);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.7rem;
+}
+
+.membre-badge-officiel {
+  display: inline-block;
+  background: var(--vert-clair);
+  color: var(--vert-fonce);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.membre-badge-ouvert {
+  display: inline-block;
+  background: var(--jaune-clair);
+  color: #8d6e00;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+
+.membre-bio {
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Paragraphes mission */
+.equipe-para {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--texte);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Section contribuer */
+.equipe-contribuer {
+  background: linear-gradient(135deg, var(--vert-fonce), #2e7d32);
+  color: white;
+  padding: 3rem 1rem;
+}
+.equipe-contribuer .equipe-h2 { color: white; }
+.equipe-contribuer .equipe-sub { color: rgba(255,255,255,0.9); }
+.equipe-contribuer .btn {
+  background: white;
+  color: var(--vert-fonce);
+}
+.equipe-contribuer .btn:hover {
+  background: var(--vert-clair);
+}
+.equipe-contribuer .btn.secondaire {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+.equipe-contribuer .btn.secondaire:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.equipe-actions {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .equipe-hero { padding: 2.5rem 1rem 2rem; }
+  .equipe-hero h1 { font-size: 1.6rem; }
+  .equipe-lead { font-size: 1rem; }
+  .equipe-h2 { font-size: 1.3rem; }
+  .membre { padding: 1.5rem 1.2rem; }
+}
