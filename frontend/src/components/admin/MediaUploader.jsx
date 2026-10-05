@@ -48,9 +48,7 @@ export default function MediaUploader({ remedeId }) {
     data.append('auteur', form.auteur);
 
     try {
-      await api.post(`/admin/remedes/${remedeId}/media`, data, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      await api.post(`/admin/remedes/${remedeId}/media`, data);
       setMessage('✅ Média uploadé. Il sera visible après validation.');
       setFichier(null);
       setForm({ titre: '', description: '', source: '', auteur: '' });

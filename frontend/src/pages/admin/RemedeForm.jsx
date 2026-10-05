@@ -245,8 +245,9 @@ export default function RemedeForm() {
             </option>
           ))}
         </select>
+      </form>
 
-        {/* --- Boutons --- */}
+              {/* --- Boutons --- */}
         <div style={{ marginTop: '2rem', display: 'flex', gap: '0.7rem' }}>
           <button type="submit" className="btn">
             {estEdition ? '💾 Enregistrer' : '➕ Créer le remède'}
@@ -261,8 +262,6 @@ export default function RemedeForm() {
             <MediaUploader remedeId={id} />
         </div>
         )}
-
-      </form>
     </div>
   );
 }

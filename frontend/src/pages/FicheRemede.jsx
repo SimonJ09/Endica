@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import Avertissement from '../components/Avertissement';
 
@@ -20,6 +20,8 @@ function BadgeFiabilite({ niveau }) {
 
 export default function FicheRemede() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [remede, setRemede] = useState(null);
   const [commentaires, setCommentaires] = useState([]);
   const [medias, setMedias] = useState([]);
@@ -44,7 +46,7 @@ export default function FicheRemede() {
         setRemede(resRemede.data);
         setLikes(resRemede.data.likes);
         setCommentaires(resComments.data.commentaires);
-        setMedias(resMedia.data.medias);   // ✅ correction
+        setMedias(resMedia.data.medias);
       })
       .catch((err) => {
         console.error(err);
@@ -52,6 +54,15 @@ export default function FicheRemede() {
       })
       .finally(() => setChargement(false));
   }, [id]);
+
+  // ---------- RETOUR INTELLIGENT ----------
+  const retour = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
 
   const liker = async () => {
     try {
@@ -87,133 +98,98 @@ export default function FicheRemede() {
   if (!remede) return <div className="container vide">Remède introuvable.</div>;
 
   return (
-    <div className="container">
-      <Link to="/" style={{ display: 'inline-block', marginTop: '1rem' }}>
-        ← Retour à l'accueil
-      </Link>
+    <div className="container fiche-container">
+      {/* ---------- RETOUR ---------- */}
+      <button onClick={retour} className="btn-retour" type="button">
+        ← Retour
+      </button>
 
-      <h2 style={{ marginTop: '1rem', color: 'var(--vert-fonce)' }}>
-        {remede.nom_local}
-      </h2>
-      {remede.nom_scientifique && (
-        <p style={{ fontStyle: 'italic', color: 'var(--texte-doux)' }}>
-          {remede.nom_scientifique}
-        </p>
-      )}
+      {/* ---------- EN-TÊTE ---------- */}
+      <header className="fiche-header">
+        <h1>{remede.nom_local}</h1>
+        {remede.nom_scientifique && (
+          <p className="fiche-scientifique">{remede.nom_scientifique}</p>
+        )}
 
-      <div style={{ marginTop: '0.8rem', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
-        <BadgeFiabilite niveau={remede.niveau_fiabilite} />
-        <span>📍 {remede.region_origine || 'Région non précisée'}</span>
-        <span>👁 {remede.vues} consultations</span>
-        <button className="btn" onClick={liker} style={{ padding: '0.4rem 0.9rem', fontSize: '0.9rem' }}>
-          ❤️ Liker ({likes})
-        </button>
-      </div>
-      {messageLike && (
-        <p style={{ marginTop: '0.5rem', color: 'var(--texte-doux)', fontSize: '0.9rem' }}>
-          {messageLike}
-        </p>
-      )}
+        <div className="fiche-meta">
+          <BadgeFiabilite niveau={remede.niveau_fiabilite} />
+          <span>📍 {remede.region_origine || 'Région non précisée'}</span>
+          <span>👁 {remede.vues} consultations</span>
+          <button
+            className="btn"
+            onClick={liker}
+            style={{ padding: '0.35rem 0.9rem', fontSize: '0.9rem' }}
+            type="button"
+          >
+            ❤️ Liker ({likes})
+          </button>
+        </div>
+        {messageLike && (
+          <p style={{ marginTop: '0.5rem', color: 'var(--texte-doux)', fontSize: '0.9rem' }}>
+            {messageLike}
+          </p>
+        )}
+      </header>
 
       <Avertissement compact />
 
       {/* ---------- PHOTOS ET VIDÉOS ---------- */}
       <section className="section">
-        <h2>📷 Photos et vidéos</h2>
+        <h2>📷 Photos, vidéos et documents</h2>
 
         {medias.length > 0 ? (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-              gap: '0.8rem',
-            }}
-          >
+          <div className="medias-grille">
             {medias.map((m) => (
-              <figure
-                key={m.id}
-                style={{
-                  margin: 0,
-                  background: 'white',
-                  border: '1px solid var(--bordure)',
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                }}
-              >
+              <figure key={m.id} className="media-item">
                 {m.type === 'image' && (
-                  <img
-                    src={m.url}
-                    alt={m.titre || 'Photo du remède'}
-                    style={{ width: '100%', height: '180px', objectFit: 'cover', display: 'block' }}
-                  />
+                  <a href={m.url} target="_blank" rel="noreferrer">
+                    <img
+                      src={m.url}
+                      alt={m.titre || 'Photo du remède'}
+                      loading="lazy"
+                    />
+                  </a>
                 )}
                 {m.type === 'video' && (
-                  <video
-                    src={m.url}
-                    controls
-                    style={{ width: '100%', height: '180px', display: 'block', background: '#000' }}
-                  />
+                  <video src={m.url} controls preload="metadata" />
                 )}
                 {m.type === 'document' && (
                   <a
                     href={m.url}
                     target="_blank"
                     rel="noreferrer"
-                    style={{
-                      display: 'flex',
-                      height: '180px',
-                      background: '#f4f5f7',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '2.5rem',
-                      textDecoration: 'none',
-                    }}
+                    className="media-doc"
                   >
-                    📄
+                    <span className="media-doc-icon">📄</span>
+                    <span className="media-doc-label">Ouvrir le document</span>
                   </a>
                 )}
-                <figcaption
-                  style={{
-                    padding: '0.6rem 0.8rem',
-                    fontSize: '0.85rem',
-                    color: 'var(--texte-doux)',
-                  }}
-                >
-                  {m.titre}
-                  {m.auteur && (
-                    <div style={{ fontSize: '0.75rem', marginTop: '0.2rem', opacity: 0.8 }}>
-                      © {m.auteur}
-                      {m.source && <> — {m.source}</>}
-                    </div>
-                  )}
+
+                <figcaption>
+                  {m.titre && <strong>{m.titre}</strong>}
+                  {m.description && <p>{m.description}</p>}
+                  <div className="media-source">
+                    {m.auteur && <>© {m.auteur}</>}
+                    {m.auteur && m.source && <> · </>}
+                    {m.source && <>{m.source}</>}
+                  </div>
                 </figcaption>
               </figure>
             ))}
           </div>
         ) : (
-          <div
-            style={{
-              background: 'white',
-              border: '2px dashed var(--bordure)',
-              borderRadius: '10px',
-              padding: '2rem 1rem',
-              textAlign: 'center',
-              color: 'var(--texte-doux)',
-            }}
-          >
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem', opacity: 0.5 }}>
-              📷
-            </div>
-            <p style={{ fontStyle: 'italic', margin: 0 }}>
-              Aucune photo ou vidéo disponible pour ce remède.
-            </p>
-            <p style={{ fontSize: '0.85rem', marginTop: '0.4rem', opacity: 0.8 }}>
-              Vous avez une photo à proposer ? Contribuez à enrichir cette fiche.
+          <div className="media-placeholder">
+            <div className="media-placeholder-icon">📷</div>
+            <p>Aucune photo, vidéo ou document disponible pour ce remède.</p>
+            <p className="media-placeholder-hint">
+              Vous avez une photo à proposer ? Contribuez à enrichir cette fiche
+              en nous contactant.
             </p>
           </div>
         )}
       </section>
 
+      {/* ---------- DESCRIPTION ---------- */}
       {remede.description && (
         <section className="section">
           <h2>📝 Description</h2>
@@ -225,14 +201,14 @@ export default function FicheRemede() {
       {remede.ingredients && remede.ingredients.length > 0 && (
         <section className="section">
           <h2>🌿 Ingrédients</h2>
-          <ul style={{ paddingLeft: '1.2rem' }}>
+          <ul className="fiche-liste">
             {remede.ingredients.map((ing) => (
-              <li key={ing.id} style={{ marginBottom: '0.4rem' }}>
+              <li key={ing.id}>
                 <Link to={`/ingredients/${ing.id}`}>
                   <strong>{ing.nom}</strong>
                 </Link>
                 {ing.nom_scientifique && <em> ({ing.nom_scientifique})</em>}
-                {ing.partie_utilisee && <> — {ing.partie_utilisee}</>}
+                {ing.partie_utilisee && <> — partie utilisée : {ing.partie_utilisee}</>}
                 {ing.quantite && <> — {ing.quantite} {ing.unite || ''}</>}
               </li>
             ))}
@@ -244,12 +220,12 @@ export default function FicheRemede() {
       {remede.indications && remede.indications.length > 0 && (
         <section className="section">
           <h2>📋 Indications rapportées</h2>
-          <p style={{ color: 'var(--texte-doux)', fontStyle: 'italic', marginBottom: '0.5rem' }}>
+          <p className="fiche-note">
             Remèdes traditionnellement rapportés pour cette indication.
           </p>
-          <ul style={{ paddingLeft: '1.2rem' }}>
+          <ul className="fiche-liste">
             {remede.indications.map((ind) => (
-              <li key={ind.id} style={{ marginBottom: '0.4rem' }}>
+              <li key={ind.id}>
                 <Link to={`/indications/${ind.id}`}>
                   <strong>{ind.nom}</strong>
                 </Link>
@@ -262,6 +238,7 @@ export default function FicheRemede() {
         </section>
       )}
 
+      {/* ---------- PRÉPARATION ---------- */}
       {remede.mode_preparation && (
         <section className="section">
           <h2>⚗️ Mode de préparation rapporté</h2>
@@ -270,6 +247,7 @@ export default function FicheRemede() {
         </section>
       )}
 
+      {/* ---------- POSOLOGIE ---------- */}
       {remede.posologie && (
         <section className="section">
           <h2>⚠️ Posologie</h2>
@@ -286,17 +264,22 @@ export default function FicheRemede() {
         )}
 
         {commentaires.map((c) => (
-          <div key={c.id} className="carte" style={{ marginBottom: '0.6rem' }}>
-            <strong>{c.pseudonyme}</strong>
-            <span style={{ color: 'var(--texte-doux)', fontSize: '0.85rem', marginLeft: '0.5rem' }}>
-              {new Date(c.date_ajout).toLocaleDateString('fr-FR')}
-            </span>
-            <p style={{ marginTop: '0.4rem' }}>{c.contenu}</p>
+          <div key={c.id} className="commentaire-carte">
+            <div className="commentaire-header">
+              <strong>{c.pseudonyme}</strong>
+              <span className="commentaire-date">
+                {new Date(c.date_ajout).toLocaleDateString('fr-FR')}
+              </span>
+            </div>
+            <p>{c.contenu}</p>
           </div>
         ))}
 
-        <h3 style={{ marginTop: '1.5rem', fontSize: '1rem' }}>Ajouter un commentaire</h3>
-        <form onSubmit={envoyerCommentaire} style={{ marginTop: '0.6rem' }}>
+        <h3 className="commentaire-form-titre">Ajouter un commentaire</h3>
+        <p className="commentaire-form-note">
+          Votre commentaire sera publié après modération.
+        </p>
+        <form onSubmit={envoyerCommentaire} className="commentaire-form">
           <input
             type="text"
             placeholder="Votre pseudonyme"
@@ -305,7 +288,7 @@ export default function FicheRemede() {
             required
             minLength={2}
             maxLength={50}
-            style={{ width: '100%', padding: '0.6rem', marginBottom: '0.5rem', border: '1px solid var(--bordure)', borderRadius: '6px' }}
+            className="form-input"
           />
           <textarea
             placeholder="Votre commentaire (il sera publié après modération)"
@@ -315,7 +298,7 @@ export default function FicheRemede() {
             minLength={5}
             maxLength={2000}
             rows={4}
-            style={{ width: '100%', padding: '0.6rem', marginBottom: '0.5rem', border: '1px solid var(--bordure)', borderRadius: '6px', fontFamily: 'inherit' }}
+            className="form-input"
           />
           <button className="btn" type="submit">Envoyer</button>
         </form>

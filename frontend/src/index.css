@@ -1989,3 +1989,345 @@ a:hover { text-decoration: underline; }
   }
   .scholar-empty h3 { font-size: 1.05rem; }
 }
+
+
+/* ---------- MÉDIAS ---------- */
+.medias-grille {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.media-item {
+  width: 100%;
+}
+
+.media-item img,
+.media-item video {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  display: block;
+  background: #f4f5f7;
+}
+
+.media-item {
+  margin: 0;
+  background: white;
+  border: 1px solid var(--bordure);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+}
+.media-item:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.media-item img {
+  width: 100%;
+  height: auto;              /* ✅ Laisse l'image garder son ratio */
+  max-height: 400px;         /* ✅ Mais pas plus de 400px de haut */
+  object-fit: contain;       /* ✅ Montre l'image ENTIÈRE */
+  display: block;
+  background: #f4f5f7;       /* Fond gris si l'image n'occupe pas tout */
+}
+
+.media-item video {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  display: block;
+  background: #000;
+}
+
+.media-item a {
+  display: block;
+  line-height: 0;            /* Enlève l'espace sous l'image */
+}
+
+.media-doc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  background: #f4f5f7;
+  text-decoration: none;
+  color: var(--vert-fonce);
+  transition: background 0.15s;
+  padding: 2rem 1rem;
+}
+.media-doc:hover {
+  background: var(--vert-clair);
+  text-decoration: none;
+}
+.media-doc-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+.media-doc-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.media-item figcaption {
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+  color: var(--texte);
+  border-top: 1px solid #f0f0f0;
+  flex: 1;
+}
+.media-item figcaption strong {
+  display: block;
+  color: var(--vert-fonce);
+  font-size: 0.92rem;
+  margin-bottom: 0.25rem;
+}
+.media-item figcaption p {
+  color: var(--texte-doux);
+  font-size: 0.82rem;
+  margin: 0.2rem 0;
+  line-height: 1.45;
+}
+.media-source {
+  font-size: 0.75rem;
+  color: var(--texte-doux);
+  opacity: 0.85;
+  margin-top: 0.4rem;
+}
+/* ============================================
+   FICHE REMÈDE
+   ============================================ */
+
+.fiche-container {
+  max-width: 900px;
+  padding-bottom: 3rem;
+}
+
+/* Bouton retour */
+.btn-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid var(--bordure);
+  color: var(--vert-fonce);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1rem;
+  margin-bottom: 1.2rem;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.btn-retour:hover {
+  background: var(--vert-clair);
+  border-color: var(--vert);
+  color: var(--vert);
+}
+
+/* En-tête de fiche */
+.fiche-header {
+  margin-bottom: 1.5rem;
+}
+.fiche-header h1 {
+  font-size: 1.9rem;
+  color: var(--vert-fonce);
+  margin-bottom: 0.3rem;
+  line-height: 1.2;
+}
+.fiche-scientifique {
+  font-style: italic;
+  color: var(--texte-doux);
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+}
+.fiche-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.92rem;
+}
+.fiche-note {
+  color: var(--texte-doux);
+  font-style: italic;
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.fiche-liste {
+  padding-left: 1.2rem;
+  line-height: 1.8;
+}
+
+/* ---------- MÉDIAS ---------- */
+.medias-grille {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.media-item {
+  width: 100%;
+}
+
+.media-item img,
+.media-item video {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  display: block;
+  background: #f4f5f7;
+}
+
+.media-item {
+  margin: 0;
+  background: white;
+  border: 1px solid var(--bordure);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+}
+.media-item:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.media-item img {
+  width: 100%;
+  height: auto;              /* ✅ Laisse l'image garder son ratio */
+  max-height: 400px;         /* ✅ Mais pas plus de 400px de haut */
+  object-fit: contain;       /* ✅ Montre l'image ENTIÈRE */
+  display: block;
+  background: #f4f5f7;       /* Fond gris si l'image n'occupe pas tout */
+}
+
+.media-item video {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  display: block;
+  background: #000;
+}
+
+.media-item a {
+  display: block;
+  line-height: 0;            /* Enlève l'espace sous l'image */
+}
+
+.media-doc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  background: #f4f5f7;
+  text-decoration: none;
+  color: var(--vert-fonce);
+  transition: background 0.15s;
+  padding: 2rem 1rem;
+}
+.media-doc:hover {
+  background: var(--vert-clair);
+  text-decoration: none;
+}
+.media-doc-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+.media-doc-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.media-item figcaption {
+  padding: 0.8rem 1rem;
+  font-size: 0.85rem;
+  color: var(--texte);
+  border-top: 1px solid #f0f0f0;
+  flex: 1;
+}
+.media-item figcaption strong {
+  display: block;
+  color: var(--vert-fonce);
+  font-size: 0.92rem;
+  margin-bottom: 0.25rem;
+}
+.media-item figcaption p {
+  color: var(--texte-doux);
+  font-size: 0.82rem;
+  margin: 0.2rem 0;
+  line-height: 1.45;
+}
+.media-source {
+  font-size: 0.75rem;
+  color: var(--texte-doux);
+  opacity: 0.85;
+  margin-top: 0.4rem;
+}
+
+
+/* ---------- COMMENTAIRES ---------- */
+.commentaire-carte {
+  background: white;
+  border: 1px solid var(--bordure);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.7rem;
+}
+.commentaire-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.commentaire-header strong {
+  color: var(--vert-fonce);
+  font-size: 0.95rem;
+}
+.commentaire-date {
+  color: var(--texte-doux);
+  font-size: 0.8rem;
+}
+.commentaire-carte p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.commentaire-form-titre {
+  margin-top: 1.5rem;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  color: var(--vert-fonce);
+}
+.commentaire-form-note {
+  font-size: 0.85rem;
+  color: var(--texte-doux);
+  margin-bottom: 0.7rem;
+}
+.commentaire-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 640px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 640px) {
+  .fiche-header h1 { font-size: 1.4rem; }
+  .fiche-scientifique { font-size: 0.95rem; }
+  .medias-grille { grid-template-columns: 1fr; }
+  .media-item img, .media-item video { height: 200px; }
+  .media-doc { height: 200px; }
+}
